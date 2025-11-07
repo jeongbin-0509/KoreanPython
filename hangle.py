@@ -99,3 +99,20 @@ def 도움말():
             원본 = "(사용자 정의)"
 
         print(f"· {이름:<10} → {원본}")
+
+# 브라우저 환경에서 input JS prompt로 대체 
+try:
+    from js import prompt as _js_prompt
+    import builtins as _b
+
+    def _입력(msg: str = "") -> str:
+        r = _js_prompt(msg)     # 취소 시 None
+        return "" if r is None else r
+
+    # KMAP과 builtins 모두에 반영
+    KMAP["입력"] = _입력
+    setattr(_b, "입력", _입력)
+
+except Exception:
+    # js 모듈이 없으면 그냥 기본 input을 사용
+    pass
